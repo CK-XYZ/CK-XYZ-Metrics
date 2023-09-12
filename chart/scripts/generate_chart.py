@@ -8,7 +8,7 @@ import os
 from github import Github
 
 
-font_path = os.path.join(os.path.dirname(__file__), '../assets/roboto.ttf')
+font_path = os.path.join(os.path.dirname(__file__), 'chart/assets/roboto.ttf')
 prop = {'family': 'Roboto', 'weight': 'black', 'size': 18}
 
 github_username = "FiendsXYZ"
@@ -62,7 +62,8 @@ if response.status_code == 200:
         colors=colors
     )
     plt.axis('equal')
-    plt.savefig('chart.png', bbox_inches='tight', facecolor=fig.get_facecolor())
+    chart_path = os.path.join(os.path.dirname(__file__), 'chart', 'chart.png')
+    plt.savefig(chart_path, bbox_inches='tight', facecolor=fig.get_facecolor())
 
 else:
     print(f"Failed to fetch repositories. Status code: {response.status_code}")
