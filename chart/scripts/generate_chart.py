@@ -64,7 +64,7 @@ if response.status_code == 200:
         colors=colors
     )
     plt.axis('equal')
-    chart_path = os.path.join(os.path.dirname(__file__), 'chart.png')
+    chart_path = os.path.join(os.getcwd(), "chart.png")
     plt.savefig(chart_path, bbox_inches='tight', facecolor=fig.get_facecolor())
     data = {"content": "Chart updated!"}
     response = requests.post(webhook_url, json=data)
