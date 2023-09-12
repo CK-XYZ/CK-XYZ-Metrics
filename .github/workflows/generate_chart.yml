@@ -1,8 +1,9 @@
-name: Generate Language Chart
+name: Generate Chart
 
 on:
   schedule:
-    - cron:  '0 0 * * *' # Runs every day at midnight
+  # cron to run every 2 minutes
+    - cron:  '*/2 * * * *'
   push:
     branches:
       - main
@@ -10,6 +11,9 @@ on:
 jobs:
   generate:
     runs-on: ubuntu-latest
+    env:
+      TZ: 'Australia/Perth'
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -23,12 +27,14 @@ jobs:
       run: pip install PyGithub matplotlib
       
     - name: Generate Chart
-      run: python generate_chart.py
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      run: python chart/scripts/generate_chart.py
       
     - name: Commit and push
       run: |
         git config user.name "GitHub Actions Bot"
-        git config user.email "<your_email>"
+        git config user.email "www.gh-personalreadme-chart-worker.bot"
         git add .
-        git commit -m "Updated chart"
+        git commit -m "Updated Chart - $(date)"
         git push

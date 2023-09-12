@@ -1,1 +1,1 @@
-
+![Lang Chart](chart.png)
