@@ -4,8 +4,9 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from matplotlib.colors import LinearSegmentedColormap
 import sys
-import os
+import json
 from github import Github
+
 
 prop = {'family': 'sans-serif', 'weight': 'black', 'size': 20}
 
@@ -24,13 +25,14 @@ headers = {
 response = requests.get(api_url, headers=headers)
 
 if response.status_code == 200:
+    repos = response.json()
+    language_count = {}
+    
     webhook_url = os.getenv("DISCORD_WEBHOOK")
     msg_content = "Updating GH chart..."
     data = {"content": msg_content}
     response = requests.post(webhook_url, json=data)
     print(f"Discord webhook response: {response.status_code}")
-    repos = response.json()
-    language_count = {}
 
     for repo in repos:
         if repo['language']:
