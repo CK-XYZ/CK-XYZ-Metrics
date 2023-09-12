@@ -62,7 +62,7 @@ if response.status_code == 200:
         colors=colors
     )
     plt.axis('equal')
-    chart_path = os.path.join(os.path.dirname(__file__), 'chart', 'chart.png')
+    chart_path = os.path.join(os.path.dirname(__file__), 'chart.png')
     plt.savefig(chart_path, bbox_inches='tight', facecolor=fig.get_facecolor())
 
 else:
