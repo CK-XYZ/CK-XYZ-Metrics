@@ -2,8 +2,8 @@ name: Generate Chart
 
 on:
   schedule:
-  # cron to run every 2 minutes
-    - cron:  '*/2 * * * *'
+  # cron to run every 5 minutes
+    - cron:  '*/5 * * * *'
   push:
     branches:
       - main
@@ -14,6 +14,7 @@ jobs:
     env:
       TZ: 'Australia/Perth'
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -29,6 +30,7 @@ jobs:
     - name: Generate Chart
       env:
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       run: python chart/scripts/generate_chart.py
       
     - name: Commit and push

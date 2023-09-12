@@ -7,9 +7,7 @@ import sys
 import os
 from github import Github
 
-
-font_path = os.path.join(os.path.dirname(__file__), 'chart/assets/roboto.ttf')
-prop = {'family': 'Roboto', 'weight': 'black', 'size': 18}
+prop = {'family': 'sans-serif', 'weight': 'black', 'size': 20}
 
 github_username = "FiendsXYZ"
 github_token = os.getenv("GH_TOKEN")
@@ -25,10 +23,12 @@ headers = {
 
 response = requests.get(api_url, headers=headers)
 
-print(response.status_code)
-
-
 if response.status_code == 200:
+    webhook_url = os.getenv("DISCORD_WEBHOOK")
+    msg_content = "Updating GH chart..."
+    data = {"content": msg_content}
+    response = requests.post(webhook_url, json=data)
+    print(f"Discord webhook response: {response.status_code}")
     repos = response.json()
     language_count = {}
 
@@ -64,6 +64,12 @@ if response.status_code == 200:
     plt.axis('equal')
     chart_path = os.path.join(os.path.dirname(__file__), 'chart.png')
     plt.savefig(chart_path, bbox_inches='tight', facecolor=fig.get_facecolor())
+    data = {"content": "Chart updated!"}
+    response = requests.post(webhook_url, json=data)
+    print(f"Discord webhook response: {response.status_code}")
 
 else:
     print(f"Failed to fetch repositories. Status code: {response.status_code}")
+    data = {"content": "Chart failed to update!"}
+    webhook_url = os.getenv("DISCORD_WEBHOOK")
+    response = requests.post(webhook_url, json=data)
