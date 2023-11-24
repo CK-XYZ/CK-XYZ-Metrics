@@ -1,62 +1,58 @@
-from github import Github
 import os
 import requests
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm
 from matplotlib.colors import LinearSegmentedColormap
+import sys
+import json
+from github import Github
 
-# GitHub Credentials and Variables
+
+prop = {'family': 'sans-serif', 'weight': 'black', 'size': 20}
+
 github_username = "FiendsXYZ"
 github_token = os.getenv("GH_TOKEN")
-webhook_url = os.getenv("DISCORD_WEBHOOK")
 
-# Initialize Variables
-commit_count = {
-    '24hr': 0,
-    '7d': 0,
-    '30d': 0,
-    '90d': 0,
-    '180d': 0,
-    '365d': 0
+api_url = f"https://api.github.com/user/repos"
+
+
+headers = {
+    "username": github_username,
+    "Authorization": f"token {github_token}"
 }
-language_commits = {}
-g = Github(github_token)
-user = g.get_user(github_username)
 
-# Fetch Repositories
-repos = user.get_repos()
 
-# Loop through each repo
-for repo in repos:
-    # Loop through each commit in the repo
-    commits = repo.get_commits()
-    for commit in commits:
-        # TODO: Add your time filtering logic here to update commit_count
-        
-        # Update language commits
-        if repo.language:
-            language_commits[repo.language] = language_commits.get(repo.language, 0) + 1
+response = requests.get(api_url, headers=headers)
 
-# Generate Chart
-prop = {'family': 'sans-serif', 'weight': 'black', 'size': 20}
-languages = list(language_commits.keys())
-counts = list(language_commits.values())
-sorted_languages = sorted(language_commits.keys(), key=lambda x: language_commits[x], reverse=True)[:5]
-sorted_counts = [language_commits[x] for x in sorted_languages]
+if response.status_code == 200:
+    repos = response.json()
+    language_count = {}
+    
+    webhook_url = os.getenv("DISCORD_WEBHOOK")
+    msg_content = "Updating GH chart..."
+    data = {"content": msg_content}
+    response = requests.post(webhook_url, json=data)
+    print(f"Discord webhook response: {response.status_code}")
 
-fig, ax = plt.subplots(figsize=(10, 8))
-fig.patch.set_facecolor('#333333')
-gradient = LinearSegmentedColormap.from_list('custom', ['#017501', '#00de00'], N=len(sorted_languages))
-colors = [gradient(i / len(sorted_languages)) for i in range(len(sorted_languages))]
+    for repo in repos:
+        if repo['language']:
+            if repo['language'] in language_count:
+                language_count[repo['language']] += 1
+            else:
+                language_count[repo['language']] = 1
 
-ax.pie(sorted_counts, labels=sorted_languages, autopct='%1.1f%%', startangle=270, colors=colors, textprops={'color': 'white', 'weight': 'bold', 'size': 16})
-plt.axis('equal')
-plt.savefig('chart.png', bbox_inches='tight', facecolor=fig.get_facecolor())
+    languages = list(language_count.keys())
+    counts = list(language_count.values())
+    sorted_languages = sorted(language_count.keys(), key=lambda lang: language_count[lang])
+    sorted_counts = [language_count[lang] for lang in sorted_languages]
+    
+    for lang in sorted_languages:
+        print(f"{lang}: {language_count[lang]}")
 
-# Update README
-readme_content = f"""<p align="center">
-  <img src="chart.png" alt="Lang Chart" width="65%">
-</p>
+    fig, ax = plt.subplots(figsize=(10, 8))
+    fig.patch.set_facecolor('#333333')
 
+<<<<<<< HEAD
 """
 readme_content += "\n## Top Languages by  Commits\n"
 
@@ -69,3 +65,28 @@ with open('README.md', 'w') as f:
 # Send Discord Notification
 data = {"content": "Chart and README updated!"}
 requests.post(webhook_url, json=data)
+=======
+ 
+    gradient = LinearSegmentedColormap.from_list('green', ['#017501', '#00de00'], N=len(sorted_languages))
+    colors = [gradient(i / len(sorted_languages)) for i in range(len(sorted_languages))] 
+    wedges, texts, autotexts = ax.pie(
+        sorted_counts,
+        labels=[label.upper() for label in sorted_languages],
+        autopct='%1.1f%%',
+        startangle=270,
+        textprops={'fontproperties': prop, 'color': 'white'}, 
+        colors=colors
+    )
+    plt.axis('equal')
+    chart_path = os.path.join(os.getcwd(), "chart.png")
+    plt.savefig(chart_path, bbox_inches='tight', facecolor=fig.get_facecolor())
+    data = {"content": "Chart updated!"}
+    response = requests.post(webhook_url, json=data)
+    print(f"Discord webhook response: {response.status_code}")
+
+else:
+    print(f"Failed to fetch repositories. Status code: {response.status_code}")
+    data = {"content": "Chart failed to update!"}
+    webhook_url = os.getenv("DISCORD_WEBHOOK")
+    response = requests.post(webhook_url, json=data)
+>>>>>>> parent of 474b487 (0.0.0.2.5)
