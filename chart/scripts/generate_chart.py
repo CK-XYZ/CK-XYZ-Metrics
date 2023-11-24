@@ -57,8 +57,16 @@ readme_content = f"""<p align="center">
   <img src="chart.png" alt="Lang Chart" width="65%">
 </p>
 
+## Commits
+
+| Time Period | Commits |
+|-------------|---------|
 """
-readme_content += "\n## Top Languages by  Commits\n"
+
+for period, count in commit_count.items():
+    readme_content += f"| {period} | {count} |\n"
+
+readme_content += "\n## Top Languages by Commits\n"
 
 for lang in sorted_languages:
     readme_content += f"- {lang}: {language_commits[lang]} commits\n"
