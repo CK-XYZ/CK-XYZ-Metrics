@@ -2,7 +2,7 @@ name: Generate Chart
 
 on:
   schedule:
-    - cron:  '1 0 * * *'
+    - cron: '1 0 * * *'
   push:
     branches:
       - main
@@ -15,32 +15,33 @@ jobs:
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
       DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-      
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.8'
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Install dependencies
-      run: pip install PyGithub matplotlib
-      
-    - name: Generate Chart
-      env:
-        GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-      run: python chart/scripts/generate_chart.py
-      
-    - name: Commit and push
-      run: |
-        git config user.name "GitHub Actions Bot"
-        git config user.email "www.gh-personalreadme-chart-worker.bot"
-        git add .
-        if git diff --exit-code --staged; then
-          echo "No changes to commit. Exiting."
-          exit 0
-        else
-          git commit -m "Updated Chart - $(date)"
-          git push
-        fi
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      - name: Install dependencies
+        run: pip install PyGithub matplotlib
+
+      - name: Generate Chart
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: python chart/scripts/generate_chart.py
+
+      - name: Commit and push
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "www.gh-personalreadme-chart-worker.bot"
+          git add .
+          if git diff --exit-code --staged; then
+            echo "No changes to commit. Exiting."
+            exit 0
+          else
+            git commit -m "Updated Chart - $(date)"
+            git pull origin main  # Pull remote changes before pushing
+            git push
+          fi
