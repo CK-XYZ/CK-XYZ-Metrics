@@ -42,4 +42,6 @@ jobs:
             exit 0
           else
             git commit -m "Updated Chart - $(date)"
+            git pull origin main  # Pull remote changes before pushing
             git push
+          fi
