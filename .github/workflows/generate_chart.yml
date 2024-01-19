@@ -35,14 +35,10 @@ jobs:
       - name: Pull with rebase
         run: git pull --rebase origin main
 
-      - name: Commit and push
+      - name: Commit and force push
         run: |
           git config user.name "GitHub Actions Bot"
           git config user.email "www.gh-personalreadme-chart-worker.bot"
           git add .
-          if git diff --exit-code --staged; then
-            echo "No changes to commit. Exiting."
-            exit 0
-          else
-            git commit -m "Updated Chart - $(date)"
-            git push
+          git commit -m "Updated Chart - $(date)"
+          git push --force
