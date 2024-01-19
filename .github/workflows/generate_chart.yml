@@ -32,6 +32,9 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         run: python chart/scripts/generate_chart.py
 
+      - name: Pull with rebase
+        run: git pull --rebase origin main
+
       - name: Commit and push
         run: |
           git config user.name "GitHub Actions Bot"
@@ -42,6 +45,4 @@ jobs:
             exit 0
           else
             git commit -m "Updated Chart - $(date)"
-            git pull origin main  # Pull remote changes before pushing
             git push
-          fi
