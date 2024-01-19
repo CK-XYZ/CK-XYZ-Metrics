@@ -32,17 +32,14 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         run: python chart/scripts/generate_chart.py
 
-      - name: Discard local changes
-        run: git reset --hard
-
-      - name: Check for changes
+      - name: Commit and push
         run: |
-          if ! git diff --exit-code; then
-            git config user.name "GitHub Actions Bot"
-            git config user.email "www.gh-personalreadme-chart-worker.bot"
-            git add .
-            git commit -m "Updated Chart - $(date)"
-            git push --force
-          else
+          git config user.name "GitHub Actions Bot"
+          git config user.email "www.gh-personalreadme-chart-worker.bot"
+          git add .
+          if git diff --exit-code --staged; then
             echo "No changes to commit. Exiting."
-          fi
+            exit 0
+          else
+            git commit -m "Updated Chart - $(date)"
+            git push
