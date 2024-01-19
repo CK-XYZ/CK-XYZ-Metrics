@@ -35,13 +35,14 @@ jobs:
       - name: Discard local changes
         run: git reset --hard
 
-      - name: Pull with rebase
-        run: git pull --rebase origin main
-
-      - name: Commit and force push
+      - name: Check for changes
         run: |
-          git config user.name "GitHub Actions Bot"
-          git config user.email "www.gh-personalreadme-chart-worker.bot"
-          git add .
-          git commit -m "Updated Chart - $(date)"
-          git push --force
+          if ! git diff --exit-code; then
+            git config user.name "GitHub Actions Bot"
+            git config user.email "www.gh-personalreadme-chart-worker.bot"
+            git add .
+            git commit -m "Updated Chart - $(date)"
+            git push --force
+          else
+            echo "No changes to commit. Exiting."
+          fi
