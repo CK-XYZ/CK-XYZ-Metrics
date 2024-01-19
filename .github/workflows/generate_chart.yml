@@ -32,6 +32,9 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         run: python chart/scripts/generate_chart.py
 
+      - name: Discard local changes
+        run: git reset --hard
+
       - name: Pull with rebase
         run: git pull --rebase origin main
 
