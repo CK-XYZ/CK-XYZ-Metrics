@@ -3,3 +3,4 @@ scripts/local.py
 chart/scripts/local.py
 /.vscode
 .vscode
+chart/scripts/gen_chart_local.py
