@@ -121,11 +121,15 @@ with open('README.md', 'w') as f:
     f.write(f"- Last 365 days: {commit_counts['365d']} commits\n")
 
 # Send final message with stats
-current_time = now.strftime("%H:%M")
+perth_now = datetime.now(pytz.timezone('Australia/Perth'))
+date_str = perth_now.strftime("%d %B %Y")
+time_str = perth_now.strftime("%I:%M%p")
+short_date_str = perth_now.strftime("%d %b %y")
+
 embeds = [
     {
         "title": "📊 GitHub Stats Update",
-        "color": 3066993,  # Green color
+        "color": 3066993,
         "fields": [
             {"name": "📁 Total Repositories", "value": total_repos, "inline": True},
             {"name": "⭐ Total Stars", "value": total_stars, "inline": True},
@@ -134,10 +138,10 @@ embeds = [
             {"name": "📅 Commits (7d)", "value": commit_counts['7d'], "inline": True},
             {"name": "📅 Commits (30d)", "value": commit_counts['30d'], "inline": True},
         ],
-        "footer": {"text": f"Updated at {current_time} (Perth time)"}
+        "footer": {"text": f"Updated at: {date_str} {time_str} (+8)"}
     }
 ]
 
-send_discord_message(f"✅ **[{current_time}]** Chart updated successfully!", embeds=embeds)
+send_discord_message(f"✅ **[{short_date_str}]** Chart updated successfully!", embeds=embeds)
 
 print("README updated successfully!")
