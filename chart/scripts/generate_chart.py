@@ -6,6 +6,7 @@ from github import Github
 from datetime import datetime, timedelta
 import requests
 import json
+import pytz
 
 # Font properties
 prop = {'family': 'sans-serif', 'weight': 'black', 'size': 20}
@@ -14,6 +15,9 @@ prop = {'family': 'sans-serif', 'weight': 'black', 'size': 20}
 github_token = os.getenv("GH_TOKEN")
 github_username = "FiendsXYZ"
 webhook_url = os.getenv("DISCORD_WEBHOOK")
+
+# Set up timezone
+perth_tz = pytz.timezone('Australia/Perth')
 
 # Discord webhook function
 def send_discord_message(content, embeds=None):
@@ -48,7 +52,7 @@ time_periods = {
 commit_counts = {period: 0 for period in time_periods.keys()}
 commit_counts['total'] = 0
 
-now = datetime.now()
+now = datetime.now(pytz.UTC).astimezone(perth_tz)
 
 for repo in repos:
     if repo.language:
@@ -61,7 +65,7 @@ for repo in repos:
 
     # Count commits for different time periods
     for commit in repo.get_commits(since=now - timedelta(days=365)):
-        commit_date = commit.commit.author.date
+        commit_date = commit.commit.author.date.replace(tzinfo=pytz.UTC).astimezone(perth_tz)
         commit_counts['total'] += 1
         for period, delta in time_periods.items():
             if now - commit_date <= delta:
@@ -117,7 +121,7 @@ with open('README.md', 'w') as f:
     f.write(f"- Last 365 days: {commit_counts['365d']} commits\n")
 
 # Send final message with stats
-current_time = datetime.now().strftime("%H:%M")
+current_time = now.strftime("%H:%M")
 embeds = [
     {
         "title": "📊 GitHub Stats Update",
@@ -130,7 +134,7 @@ embeds = [
             {"name": "📅 Commits (7d)", "value": commit_counts['7d'], "inline": True},
             {"name": "📅 Commits (30d)", "value": commit_counts['30d'], "inline": True},
         ],
-        "footer": {"text": f"Updated at {current_time}"}
+        "footer": {"text": f"Updated at {current_time} (Perth time)"}
     }
 ]
 
