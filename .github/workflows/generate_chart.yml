@@ -24,7 +24,7 @@ jobs:
           python-version: '3.8'
 
       - name: Install dependencies
-        run: pip install PyGithub matplotlib
+        run: pip install PyGithub matplotlib pytz
 
       - name: Generate Chart
         env:
