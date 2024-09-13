@@ -2,7 +2,7 @@ name: Generate Chart
 
 on:
   schedule:
-    - cron: '0 16 * * *'  # Runs daily at 16:00 UTC (00:00 Perth Time)
+    - cron: '1 0 * * *'
   push:
     branches:
       - main
@@ -11,56 +11,37 @@ jobs:
   generate:
     runs-on: ubuntu-latest
     env:
-      TZ: 'Australia/Perth'  # Sets the timezone for the workflow
+      TZ: 'Australia/Perth'
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
       DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
     steps:
-      # Step 1: Checkout the repository
       - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          persist-credentials: false  # Ensures GH_TOKEN is used for pushing
+        uses: actions/checkout@v2
 
-      # Step 2: Set up Python environment
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v2
         with:
           python-version: '3.8'
 
-      # Step 3: Install necessary Python dependencies
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install PyGithub matplotlib pytz requests
+        run: pip install PyGithub matplotlib pytz
 
-      # Step 4: Generate Chart and Update README
-      - name: Generate Chart and Update README
+      - name: Generate Chart
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: python chart/scripts/generate_chart.py
+
+      - name: Commit and push
         run: |
-          python chart/scripts/generate_chart.py
-
-      # Step 5: Configure Git with Token Authentication
-      - name: Configure Git for Authentication
-        run: |
-          git config --global user.name "GitHub Actions Bot"
-          git config --global user.email "actions@github.com"
-          git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}.git
-
-      # Step 6: Commit and Push Changes
-      - name: Commit and Push Changes
-        run: |
-          # Stage the specific files to ensure only these are committed
-          git add chart.png README.md
-
-          # Check if there are any changes to commit
-          if ! git diff --cached --quiet; then
-            # Commit the changes with a timestamp
-            git commit -m "📈 Update chart and README - $(date +'%Y-%m-%d %H:%M:%S')"
-
-            # Push the changes to the main branch using the updated remote URL
-            git push origin main
+          git config user.name "GitHub Actions Bot"
+          git config user.email "www.gh-personalreadme-chart-worker.bot"
+          git add .
+          if git diff --exit-code --staged; then
+            echo "No changes to commit. Exiting."
+            exit 0
           else
-            echo "No changes detected. Skipping commit."
+            git commit -m "Updated Chart - $(date)"
+            git pull origin main  # Pull remote changes before pushing
+            git push
           fi
