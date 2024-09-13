@@ -76,7 +76,7 @@ sorted_languages = sorted(language_count.keys(), key=lambda lang: language_count
 sorted_counts = [language_count[lang] for lang in sorted_languages]
 
 # Create pie chart
-fig, ax = plt.subplots(figsize=(6, 4.8))
+fig, ax = plt.subplots(figsize=(8, 5))
 fig.patch.set_facecolor('#333333')
 
 gradient = LinearSegmentedColormap.from_list('green', ['#017501', '#00de00'], N=len(sorted_languages))
