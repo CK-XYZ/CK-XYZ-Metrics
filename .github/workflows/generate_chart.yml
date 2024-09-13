@@ -41,13 +41,16 @@ jobs:
         run: |
           python chart/scripts/generate_chart.py
 
-      # Step 5: Commit and Push Changes
-      - name: Commit and push changes
+      # Step 5: Configure Git with Token Authentication
+      - name: Configure Git for Authentication
         run: |
-          # Configure Git with a user name and email
-          git config user.name "GitHub Actions Bot"
-          git config user.email "actions@github.com"
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions@github.com"
+          git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}.git
 
+      # Step 6: Commit and Push Changes
+      - name: Commit and Push Changes
+        run: |
           # Stage the specific files to ensure only these are committed
           git add chart.png README.md
 
@@ -56,7 +59,7 @@ jobs:
             # Commit the changes with a timestamp
             git commit -m "📈 Update chart and README - $(date +'%Y-%m-%d %H:%M:%S')"
 
-            # Push the changes to the main branch using GH_TOKEN
+            # Push the changes to the main branch using the updated remote URL
             git push origin main
           else
             echo "No changes detected. Skipping commit."
