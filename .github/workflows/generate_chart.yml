@@ -2,10 +2,10 @@ name: Generate Chart
 
 on:
   schedule:
-    - cron: '0 16 * * *'
+    - cron: '0 16 * * *' 
   push:
     branches:
-      - main
+      - main 
 
 jobs:
   generate:
@@ -32,16 +32,20 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         run: python chart/scripts/generate_chart.py
 
-      - name: Commit and push
+      - name: Configure Git (Set Pull Strategy)
         run: |
           git config user.name "GitHub Actions Bot"
-          git config user.email "www.gh-personalreadme-chart-worker.bot"
+          git config user.email "gh-actions-bot@example.com"
+          git config pull.rebase false  
+          git config pull.ff only    
+
+      - name: Commit and push
+        run: |
           git add .
           if git diff --exit-code --staged; then
             echo "No changes to commit. Exiting."
             exit 0
           else
             git commit -m "Updated Chart - $(date)"
-            git pull origin main  # Pull remote changes before pushing
+            git pull origin main --ff-only 
             git push
-          fi
