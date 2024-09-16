@@ -32,7 +32,7 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         run: python chart/scripts/generate_chart.py
 
-      - name: Configure Git (Set Pull Strategy)
+      - name: Configure Git
         run: |
           git config user.name "GitHub Actions Bot"
           git config user.email "gh-actions-bot@example.com"
@@ -49,3 +49,4 @@ jobs:
             git commit -m "Updated Chart - $(date)"
             git pull origin main --ff-only 
             git push
+          fi
