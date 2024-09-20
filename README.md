@@ -16,17 +16,17 @@
 
 ## 📈 Commit Activity
 
-- **Last 24 hours**: 26 commits
-- **Last 7 days**: 387 commits
-- **Last 30 days**: 883 commits
-- **Last 365 days**: 2008 commits
+- **Last 24 hours**: 77 commits
+- **Last 7 days**: 398 commits
+- **Last 30 days**: 959 commits
+- **Last 365 days**: 2085 commits
 
 ## 📝 Top Languages by Lines of Code
 
-- **JavaScript**: 63392 LOC
+- **JavaScript**: 63930 LOC
 - **Solidity**: 15799 LOC
 - **TypeScript**: 14492 LOC
-- **CSS**: 13086 LOC
+- **CSS**: 13392 LOC
 - **Handlebars**: 2241 LOC
 - **MDX**: 1226 LOC
 - **Python**: 1087 LOC
