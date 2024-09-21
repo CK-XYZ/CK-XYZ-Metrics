@@ -137,12 +137,12 @@ with open('README.md', 'w') as f:
     f.write(f"- **Total Watchers**: {total_watchers}\n")
     f.write(f"- **Languages Used**: {len(languages_used)}\n")
     f.write(f"- **Average Repository Size**: {avg_repo_size:.2f} MB\n")
-    if most_starred:
-        f.write(f"- **Most Starred Repository**: [{most_starred.name}]({most_starred.html_url}) with {most_starred.stargazers_count} ⭐\n")
-    if most_forked:
-        f.write(f"- **Most Forked Repository**: [{most_forked.name}]({most_forked.html_url}) with {most_forked.forks_count} 🍴\n")
-    if most_watched:
-        f.write(f"- **Most Watched Repository**: [{most_watched.name}]({most_watched.html_url}) with {most_watched.watchers_count} 👀\n")
+    #if most_starred:
+        #f.write(f"- **Most Starred Repository**: [{most_starred.name}]({most_starred.html_url}) with {most_starred.stargazers_count} ⭐\n")
+    #if most_forked:
+        #f.write(f"- **Most Forked Repository**: [{most_forked.name}]({most_forked.html_url}) with {most_forked.forks_count} 🍴\n")
+    #if most_watched:
+        #f.write(f"- **Most Watched Repository**: [{most_watched.name}]({most_watched.html_url}) with {most_watched.watchers_count} 👀\n")
     f.write(f"\n## 📈 Commit Activity\n\n")
     f.write(f"- **Last 24 hours**: {commit_counts['24h']} commits\n")
     f.write(f"- **Last 7 days**: {commit_counts['7d']} commits\n")
@@ -173,9 +173,9 @@ embeds = [
             {"name": "**Total Watchers**", "value": f"{total_watchers}", "inline": True},
             {"name": "**Languages Used**", "value": f"{len(languages_used)}", "inline": True},
             {"name": "**Average Repo Size**", "value": f"{avg_repo_size:.2f} MB", "inline": True},
-            {"name": "**Most Starred Repo**", "value": most_starred.name if most_starred else "N/A", "inline": True},
-            {"name": "**Most Forked Repo**", "value": most_forked.name if most_forked else "N/A", "inline": True},
-            {"name": "**Most Watched Repo**", "value": most_watched.name if most_watched else "N/A", "inline": True},
+            #{"name": "**Most Starred Repo**", "value": most_starred.name if most_starred else "N/A", "inline": True},
+            #{"name": "**Most Forked Repo**", "value": most_forked.name if most_forked else "N/A", "inline": True},
+            #{"name": "**Most Watched Repo**", "value": most_watched.name if most_watched else "N/A", "inline": True},
             {"name": "**Commits (24h)**", "value": f"{commit_counts['24h']}", "inline": True},
             {"name": "**Commits (7d)**", "value": f"{commit_counts['7d']}", "inline": True},
             {"name": "**Commits (30d)**", "value": f"{commit_counts['30d']}", "inline": True},
