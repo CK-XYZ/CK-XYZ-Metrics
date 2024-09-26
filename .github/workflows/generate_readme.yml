@@ -32,7 +32,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        run: python scripts/generate.py 
+        run: python readme/scripts/generate.py
 
       - name: Configure Git
         run: |
