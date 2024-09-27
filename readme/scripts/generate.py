@@ -98,38 +98,27 @@ with open('README.md', 'w') as f:
     
     # Quick Stats Table
     f.write(f"## 📊 Quick Stats\n\n")
-    f.write(f"| Metric               | Count       |\n")
-    f.write(f"|----------------------|-------------|\n")
-    f.write(f"| Total Repositories   | {total_repos} |\n")
-    f.write(f"| Total Stars Earned   | {total_stars} |\n")
-    f.write(f"| Total Forks          | {total_forks} |\n")
-    f.write(f"| Total Watchers       | {total_watchers} |\n")
-    f.write(f"| Languages Used       | {len(languages_used)} |\n")
-    f.write(f"| Average Repo Size    | {avg_repo_size:.2f} MB |\n")
+    f.write(f"| Metric               | Value       | Metric               | Value       |\n")
+    f.write(f"|----------------------|-------------|----------------------|-------------|\n")
+    f.write(f"| Total Repositories   | {total_repos} | Total Stars Earned   | {total_stars} |\n")
+    f.write(f"| Total Forks          | {total_forks} | Total Watchers       | {total_watchers} |\n")
+    f.write(f"| Languages Used       | {len(languages_used)} | Average Repo Size    | {avg_repo_size:.2f} MB |\n")
     
     # Commit Activity Table
     f.write(f"\n## 📈 Commit Activity\n\n")
-    f.write(f"| Time Period      | Commits      |\n")
-    f.write(f"|------------------|--------------|\n")
-    f.write(f"| Last 24 Hours    | {commit_counts['24h']} |\n")
-    f.write(f"| Last 7 Days      | {commit_counts['7d']} |\n")
-    f.write(f"| Last 30 Days     | {commit_counts['30d']} |\n")
-    f.write(f"| Last 365 Days    | {commit_counts['365d']} |\n")
+    f.write(f"| Time Period      | Commits      | Time Period      | Commits      |\n")
+    f.write(f"|------------------|--------------|------------------|--------------|\n")
+    f.write(f"| Last 24 Hours    | {commit_counts['24h']} | Last 7 Days      | {commit_counts['7d']} |\n")
+    f.write(f"| Last 30 Days     | {commit_counts['30d']} | Last 365 Days    | {commit_counts['365d']} |\n")
     
     # Top Languages by Lines of Code Table
     f.write(f"\n## 📝 Top Languages by Lines of Code\n\n")
-    f.write(f"| Language       | LOC        |\n")
-    f.write(f"|----------------|------------|\n")
-    for lang, loc in top_languages_loc:
-        f.write(f"| {lang}           | {loc} LOC |\n")
-    
-    # include most starred/forked/watched repositories
-    # if most_starred:
-    #     f.write(f"\n- **Most Starred Repository**: [{most_starred.name}]({most_starred.html_url}) with {most_starred.stargazers_count} ⭐\n")
-    # if most_forked:
-    #     f.write(f"- **Most Forked Repository**: [{most_forked.name}]({most_forked.html_url}) with {most_forked.forks_count} 🍴\n")
-    # if most_watched:
-    #     f.write(f"- **Most Watched Repository**: [{most_watched.name}]({most_watched.html_url}) with {most_watched.watchers_count} 👀\n")
+    f.write(f"| Language       | LOC        | Language       | LOC        |\n")
+    f.write(f"|----------------|------------|----------------|------------|\n")
+    for i in range(0, len(top_languages_loc), 2):
+        lang1, loc1 = top_languages_loc[i]
+        lang2, loc2 = top_languages_loc[i + 1] if i + 1 < len(top_languages_loc) else ("", "")
+        f.write(f"| {lang1}       | {loc1} LOC  | {lang2}       | {loc2} LOC  |\n")
     
     f.write(f"\n## 📅 Last Updated\n\n")
     perth_now = datetime.now(perth_tz)
@@ -137,7 +126,7 @@ with open('README.md', 'w') as f:
     time_str = perth_now.strftime("%I:%M %p")
     f.write(f"Updated on **{date_str}** at **{time_str}** (Perth Time)\n")
 
-# Send final message with enhanced Discord embed
+# Send Discord message with updated stats
 short_date_str = perth_now.strftime("%d %b %y")
 
 # Prepare Top Languages by LOC for Discord Embed
@@ -155,14 +144,11 @@ embeds = [
             {"name": "**Total Watchers**", "value": f"{total_watchers}", "inline": True},
             {"name": "**Languages Used**", "value": f"{len(languages_used)}", "inline": True},
             {"name": "**Average Repo Size**", "value": f"{avg_repo_size:.2f} MB", "inline": True},
-            # {"name": "**Most Starred Repo**", "value": most_starred.name if most_starred else "N/A", "inline": True},
-            # {"name": "**Most Forked Repo**", "value": most_forked.name if most_forked else "N/A", "inline": True},
-            # {"name": "**Most Watched Repo**", "value": most_watched.name if most_watched else "N/A", "inline": True},
             {"name": "**Commits (24h)**", "value": f"{commit_counts['24h']}", "inline": True},
             {"name": "**Commits (7d)**", "value": f"{commit_counts['7d']}", "inline": True},
             {"name": "**Commits (30d)**", "value": f"{commit_counts['30d']}", "inline": True},
             {"name": "**Commits (365d)**", "value": f"{commit_counts['365d']}", "inline": True},
-            {"name": "\u200B", "value": "\u200B"},  # Blank field for spacing
+            {"name": "\u200B", "value": "\u200B"}, 
             {"name": "**Top Languages by Lines of Code**", "value": top_languages_loc_str, "inline": False},
         ],
     }
