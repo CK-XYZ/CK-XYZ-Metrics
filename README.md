@@ -12,19 +12,19 @@
 
 | Time Period      | Commits      | Time Period      | Commits      |
 |------------------|--------------|------------------|--------------|
-| Last 24 Hours    | 4 | Last 7 Days      | 55 |
-| Last 30 Days     | 346 | Last 365 Days    | 2634 |
+| Last 24 Hours    | 13 | Last 7 Days      | 64 |
+| Last 30 Days     | 348 | Last 365 Days    | 2645 |
 
 ## 📝 Top Languages by Lines of Code
 
 | Language       | LOC        | Language       | LOC        |
 |----------------|------------|----------------|------------|
-| JavaScript       | 72471 LOC  | TypeScript       | 23811 LOC  |
-| Solidity       | 15347 LOC  | CSS       | 14464 LOC  |
-| Handlebars       | 3573 LOC  | Python       | 2154 LOC  |
+| JavaScript       | 72471 LOC  | TypeScript       | 24653 LOC  |
+| Solidity       | 15347 LOC  | CSS       | 14499 LOC  |
+| Python       | 5681 LOC  | Handlebars       | 3573 LOC  |
 | MDX       | 1226 LOC  | Swift       | 672 LOC  |
 | C#       | 459 LOC  | HTML       | 447 LOC  |
 
 ## 📅 Last Updated
 
-Updated on **25 October 2024** at **12:05 AM** (Perth Time)
+Updated on **26 October 2024** at **12:04 AM** (Perth Time)
