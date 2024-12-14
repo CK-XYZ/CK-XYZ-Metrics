@@ -11,10 +11,15 @@ import pytz
 # Font properties for the chart
 prop = {'family': 'sans-serif', 'weight': 'black', 'size': 20}
 
-# GitHub credentials
+# GitHub credentials and environment checks
 github_token = os.getenv("GH_TOKEN")
-github_username = "FiendsXYZ"
 webhook_url = os.getenv("DISCORD_WEBHOOK")
+if not github_token:
+    raise ValueError("GH_TOKEN environment variable not set or invalid")
+if not webhook_url:
+    raise ValueError("DISCORD_WEBHOOK environment variable not set or invalid")
+
+github_username = "FiendsXYZ"
 
 # Set up timezone
 perth_tz = pytz.timezone('Australia/Perth')
@@ -24,6 +29,8 @@ def send_discord_message(content, embeds=None):
     data = {"content": content, "embeds": embeds}
     response = requests.post(webhook_url, json=data)
     print(f"Discord webhook response: {response.status_code}")
+    if response.status_code != 204 and response.status_code != 200:
+        print(f"Error sending to Discord: {response.text}")
 
 # Send initial message
 send_discord_message("🔄 Updating GitHub stats...")
@@ -59,14 +66,15 @@ for repo in repos:
     if repo.language:
         language_count[repo.language] = language_count.get(repo.language, 0) + 1
         languages_used.add(repo.language)
-    
+
     # Fetch languages by bytes
     try:
         langs = repo.get_languages()
+        print(f"Debug: {repo.name} languages: {langs}")
         for lang, bytes_count in langs.items():
             language_bytes[lang] = language_bytes.get(lang, 0) + bytes_count
-    except:
-        # Handle repositories where language stats can't be accessed
+    except Exception as e:
+        print(f"Error fetching languages for {repo.name}: {e}")
         continue
 
     total_stars += repo.stargazers_count
@@ -76,14 +84,16 @@ for repo in repos:
 
     # Count commits for different time periods
     try:
-        for commit in repo.get_commits(since=now - timedelta(days=365)):
-            commit_date = commit.commit.author.date.replace(tzinfo=pytz.UTC).astimezone(perth_tz)
-            commit_counts['total'] += 1
-            for period, delta in time_periods.items():
-                if now - commit_date <= delta:
-                    commit_counts[period] += 1
-    except:
-        # Handle repositories where commits can't be accessed
+        commits = repo.get_commits(since=now - timedelta(days=365))
+        for commit in commits:
+            if commit.commit and commit.commit.author and commit.commit.author.date:
+                commit_date = commit.commit.author.date.replace(tzinfo=pytz.UTC).astimezone(perth_tz)
+                commit_counts['total'] += 1
+                for period, delta in time_periods.items():
+                    if now - commit_date <= delta:
+                        commit_counts[period] += 1
+    except Exception as e:
+        print(f"Error counting commits for {repo.name}: {e}")
         continue
 
 # Sort languages by count
@@ -102,7 +112,7 @@ wedges, texts, autotexts = ax.pie(
     labels=[label.upper() for label in sorted_languages],
     autopct='%1.1f%%',
     startangle=270,
-    textprops={'fontproperties': prop, 'color': 'white'}, 
+    textprops={'fontproperties': prop, 'color': 'white'},
     colors=colors
 )
 
@@ -117,16 +127,16 @@ most_forked = max(repos, key=lambda r: r.forks_count) if repos else None
 most_watched = max(repos, key=lambda r: r.watchers_count) if repos else None
 
 # Calculate average repo size in MB
-avg_repo_size = total_size / total_repos / 1024 if total_repos > 0 else 0
+avg_repo_size = (total_size / total_repos / 1024) if total_repos > 0 else 0
 
-# Calculate Top Languages by Lines of Code
-# Assuming average 50 bytes per line (this is an approximation)
+# Calculate Top Languages by Lines of Code (heuristic)
+# Note: This is a rough estimate. GitHub language stats may not reflect recent pushes immediately.
 avg_bytes_per_line = 50
 language_loc = {lang: bytes_count // avg_bytes_per_line for lang, bytes_count in language_bytes.items()}
 sorted_loc = sorted(language_loc.items(), key=lambda item: item[1], reverse=True)
-top_languages_loc = sorted_loc[:10]  # Top 10 languages
+top_languages_loc = sorted_loc[:10]
 
-# Update README with improved formatting
+# Update README
 with open('README.md', 'w') as f:
     f.write(f"# {github_username}'s GitHub Stats\n\n")
     f.write(f"![Language Distribution](chart.png)\n\n")
@@ -137,12 +147,6 @@ with open('README.md', 'w') as f:
     f.write(f"- **Total Watchers**: {total_watchers}\n")
     f.write(f"- **Languages Used**: {len(languages_used)}\n")
     f.write(f"- **Average Repository Size**: {avg_repo_size:.2f} MB\n")
-    #if most_starred:
-        #f.write(f"- **Most Starred Repository**: [{most_starred.name}]({most_starred.html_url}) with {most_starred.stargazers_count} ⭐\n")
-    #if most_forked:
-        #f.write(f"- **Most Forked Repository**: [{most_forked.name}]({most_forked.html_url}) with {most_forked.forks_count} 🍴\n")
-    #if most_watched:
-        #f.write(f"- **Most Watched Repository**: [{most_watched.name}]({most_watched.html_url}) with {most_watched.watchers_count} 👀\n")
     f.write(f"\n## 📈 Commit Activity\n\n")
     f.write(f"- **Last 24 hours**: {commit_counts['24h']} commits\n")
     f.write(f"- **Last 7 days**: {commit_counts['7d']} commits\n")
@@ -152,13 +156,12 @@ with open('README.md', 'w') as f:
     for lang, loc in top_languages_loc:
         f.write(f"- **{lang}**: {loc} LOC\n")
 
-# Send final message with enhanced Discord embed
+# Prepare Discord embed
 perth_now = datetime.now(perth_tz)
 date_str = perth_now.strftime("%d %B %Y")
 time_str = perth_now.strftime("%I:%M %p")
 short_date_str = perth_now.strftime("%d %b %y")
 
-# Prepare Top Languages by LOC for Discord Embed
 top_languages_loc_str = "\n".join([f"**{lang}**: {loc} LOC" for lang, loc in top_languages_loc])
 
 embeds = [
@@ -173,14 +176,11 @@ embeds = [
             {"name": "**Total Watchers**", "value": f"{total_watchers}", "inline": True},
             {"name": "**Languages Used**", "value": f"{len(languages_used)}", "inline": True},
             {"name": "**Average Repo Size**", "value": f"{avg_repo_size:.2f} MB", "inline": True},
-            #{"name": "**Most Starred Repo**", "value": most_starred.name if most_starred else "N/A", "inline": True},
-            #{"name": "**Most Forked Repo**", "value": most_forked.name if most_forked else "N/A", "inline": True},
-            #{"name": "**Most Watched Repo**", "value": most_watched.name if most_watched else "N/A", "inline": True},
             {"name": "**Commits (24h)**", "value": f"{commit_counts['24h']}", "inline": True},
             {"name": "**Commits (7d)**", "value": f"{commit_counts['7d']}", "inline": True},
             {"name": "**Commits (30d)**", "value": f"{commit_counts['30d']}", "inline": True},
             {"name": "**Commits (365d)**", "value": f"{commit_counts['365d']}", "inline": True},
-            {"name": "\u200B", "value": "\u200B"},  # Blank field for spacing
+            {"name": "\u200B", "value": "\u200B"},
             {"name": "**Top Languages by Lines of Code**", "value": top_languages_loc_str, "inline": False},
         ],
         "footer": {"text": f"Updated on {date_str} at {time_str} (Perth Time)"}
