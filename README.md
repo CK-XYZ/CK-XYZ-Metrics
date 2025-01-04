@@ -12,8 +12,8 @@
 
 | Time Period      | Commits      | Time Period      | Commits      |
 |------------------|--------------|------------------|--------------|
-| Last 24 Hours    | 32 | Last 7 Days      | 70 |
-| Last 30 Days     | 267 | Last 365 Days    | 2962 |
+| Last 24 Hours    | 1 | Last 7 Days      | 70 |
+| Last 30 Days     | 264 | Last 365 Days    | 2956 |
 
 ## 📝 Top Languages by Lines of Code
 
@@ -27,4 +27,4 @@
 
 ## 📅 Last Updated
 
-Updated on **04 January 2025** at **12:17 AM** (Perth Time)
+Updated on **05 January 2025** at **12:15 AM** (Perth Time)
