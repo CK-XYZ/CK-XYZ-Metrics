@@ -10,13 +10,17 @@ on:
 jobs:
   generate:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     env:
       TZ: 'Australia/Perth'
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
       DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -36,17 +40,14 @@ jobs:
         run: |
           git config user.name "GitHub Actions Bot"
           git config user.email "gh-actions-bot@example.com"
-          git config pull.rebase false  
-          git config pull.ff only    
 
       - name: Commit and push
         run: |
-          git add .
-          if git diff --exit-code --staged; then
-            echo "No changes to commit. Exiting."
+          git add README.md chart.png
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
             exit 0
-          else
-            git commit -m "Updated Chart - $(date)"
-            git pull origin main --ff-only 
-            git push
           fi
+          git commit -m "📈 Update GitHub Stats - $(date '+%Y-%m-%d %H:%M:%S')"
+          git pull --rebase origin main
+          git push origin main
