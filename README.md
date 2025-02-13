@@ -4,27 +4,27 @@
 
 | Metric               | Value       | Metric               | Value       |
 |----------------------|-------------|----------------------|-------------|
-| Total Repositories   | 53 | Total Stars Earned   | 2 |
+| Total Repositories   | 54 | Total Stars Earned   | 2 |
 | Total Forks          | 2 | Total Watchers       | 2 |
-| Languages Used       | 8 | Average Repo Size    | 114.74 MB |
+| Languages Used       | 8 | Average Repo Size    | 112.62 MB |
 
 ## 📈 Commit Activity
 
 | Time Period      | Commits      | Time Period      | Commits      |
 |------------------|--------------|------------------|--------------|
-| Last 24 Hours    | 1 | Last 7 Days      | 19 |
-| Last 30 Days     | 122 | Last 365 Days    | 2978 |
+| Last 24 Hours    | 2 | Last 7 Days      | 20 |
+| Last 30 Days     | 122 | Last 365 Days    | 2980 |
 
 ## 📝 Top Languages by Lines of Code
 
 | Language       | LOC        | Language       | LOC        |
 |----------------|------------|----------------|------------|
-| JavaScript       | 75873 LOC  | TypeScript       | 68289 LOC  |
-| Python       | 19402 LOC  | CSS       | 15609 LOC  |
+| JavaScript       | 76116 LOC  | TypeScript       | 68399 LOC  |
+| Python       | 19402 LOC  | CSS       | 15616 LOC  |
 | Solidity       | 15347 LOC  | Handlebars       | 3926 LOC  |
 | MDX       | 1226 LOC  | HTML       | 863 LOC  |
 | Swift       | 672 LOC  | C#       | 459 LOC  |
 
 ## 📅 Last Updated
 
-Updated on **13 February 2025** at **12:05 AM** (Perth Time)
+Updated on **14 February 2025** at **12:05 AM** (Perth Time)
