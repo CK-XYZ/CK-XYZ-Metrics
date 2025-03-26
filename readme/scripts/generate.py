@@ -94,38 +94,51 @@ top_languages_loc = sorted_loc[:6]
 
 # Update README
 with open('README.md', 'w') as f:
-    f.write(f"# {github_username}'s GitHub Stats\n\n")
-    
-    # Quick Stats Table
-    f.write(f"## 📊 Quick Stats\n\n")
-    f.write(f"| Metric               | Value       | Metric               | Value       |\n")
-    f.write(f"|----------------------|-------------|----------------------|-------------|\n")
-    f.write(f"| Total Repositories   | {total_repos} | Total Watchers       | {total_watchers} |\n")
-    f.write(f"| Languages Used       | {len(languages_used)} | Average Repo Size    | {avg_repo_size:.2f} MB |\n")
-    
-    # Commit Activity Table
-    f.write(f"\n## 📈 Commit Activity\n\n")
-    f.write(f"| Time Period      | Commits      | Time Period      | Commits      |\n")
-    f.write(f"|------------------|--------------|------------------|--------------|\n")
-    f.write(f"| Last 24 Hours    | {commit_counts['24h']} | Last 7 Days      | {commit_counts['7d']} |\n")
-    f.write(f"| Last 30 Days     | {commit_counts['30d']} | Last 365 Days    | {commit_counts['365d']} |\n")
-    
-    # Top Languages by Lines of Code Table
-    f.write(f"\n## 📝 Top Languagese\n\n")
-    f.write(f"| Language       | LOC        | Language       | LOC        |\n")
-    f.write(f"|----------------|------------|----------------|------------|\n")
-    for i in range(0, len(top_languages_loc), 2):
-        lang1, loc1 = top_languages_loc[i]
-        lang2, loc2 = top_languages_loc[i + 1] if i + 1 < len(top_languages_loc) else ("", "")
-        f.write(f"| {lang1}       | {loc1} LOC  | {lang2}       | {loc2} LOC  |\n")
-    
-    f.write(f"\n## 📅 Last Updated\n\n")
+    f.write(f"<table><tr>\n")
+    # Quick Stats
+    f.write(f"<td valign='top'>\n\n")
+    f.write(f"<h2>📊 Quick Stats</h2>\n\n")
+    f.write(f"<table>\n")
+    f.write(f"<tr><td><b>Total Repositories</b></td><td>{total_repos}</td></tr>\n")
+    f.write(f"<tr><td><b>Total Watchers</b></td><td>{total_watchers}</td></tr>\n")
+    f.write(f"<tr><td><b>Languages Used</b></td><td>{len(languages_used)}</td></tr>\n")
+    f.write(f"<tr><td><b>Average Repo Size</b></td><td>{avg_repo_size:.2f} MB</td></tr>\n")
+    f.write(f"</table>\n</td>\n")
+    # Commit Activity
+    f.write(f"<td valign='top'>\n\n")
+    f.write(f"<h2>📈 Commit Activity</h2>\n\n")
+    f.write(f"<table>\n")
+    f.write(f"<tr><td><b>Last 24 Hours</b></td><td>{commit_counts['24h']}</td></tr>\n")
+    f.write(f"<tr><td><b>Last 7 Days</b></td><td>{commit_counts['7d']}</td></tr>\n")
+    f.write(f"<tr><td><b>Last 30 Days</b></td><td>{commit_counts['30d']}</td></tr>\n")
+    f.write(f"<tr><td><b>Last 365 Days</b></td><td>{commit_counts['365d']}</td></tr>\n")
+    f.write(f"</table>\n</td>\n")
+    f.write(f"</tr></table>\n\n")
+    f.write(f"<h2>📝 Top Languages</h2>\n\n")
+    f.write(f"<table>\n<tr>\n")
+
+    cols = 3  # 3 language pairs per row = 6 cells
+    for i, (lang, loc) in enumerate(top_languages_loc):
+        f.write(f"<td><b>{lang}</b></td><td>{loc} LOC</td>")
+        if (i + 1) % cols == 0:
+            f.write("</tr>\n<tr>\n")
+
+    remainder = len(top_languages_loc) % cols
+    if remainder:
+        for _ in range(cols - remainder):
+            f.write("<td></td><td></td>")
+        f.write("</tr>\n")
+
+    f.write("</tr></table>\n\n")
+
+    # Last updated timestamp
+    f.write(f"<h2>📅 Last Updated</h2>\n\n")
     perth_now = datetime.now(perth_tz)
     date_str = perth_now.strftime("%d %B %Y")
     time_str = perth_now.strftime("%I:%M %p")
-    f.write(f"Updated on **{date_str}** at **{time_str}** (+8)\n")
+    f.write(f"Updated on <b>{date_str}</b> at <b>{time_str}</b> (+8)\n")
 
-# Send Discord message with updated stats
+# Send Discord message 
 short_date_str = perth_now.strftime("%d %b %y")
 
 # Prepare Top Languages by LOC for Discord Embed
