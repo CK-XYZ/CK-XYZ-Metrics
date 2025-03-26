@@ -6,7 +6,7 @@ import pytz
 
 # GitHub credentials
 github_token = os.getenv("GH_TOKEN")
-github_username = "FiendsXYZ"
+github_username = "CK-XYZ"
 webhook_url = os.getenv("DISCORD_WEBHOOK")
 
 # Set up timezone
