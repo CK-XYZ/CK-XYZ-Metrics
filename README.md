@@ -1,4 +1,4 @@
-# FiendsXYZ's GitHub Stats
+# CK-XYZ's GitHub Stats
 
 ## 📊 Quick Stats
 
@@ -12,8 +12,8 @@
 
 | Time Period      | Commits      | Time Period      | Commits      |
 |------------------|--------------|------------------|--------------|
-| Last 24 Hours    | 6 | Last 7 Days      | 65 |
-| Last 30 Days     | 117 | Last 365 Days    | 2952 |
+| Last 24 Hours    | 8 | Last 7 Days      | 67 |
+| Last 30 Days     | 119 | Last 365 Days    | 2954 |
 
 ## 📝 Top Languages by Lines of Code
 
@@ -27,4 +27,4 @@
 
 ## 📅 Last Updated
 
-Updated on **27 March 2025** at **05:23 AM** (Perth Time)
+Updated on **27 March 2025** at **05:26 AM** (Perth Time)
