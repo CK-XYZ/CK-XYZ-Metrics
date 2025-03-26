@@ -90,7 +90,7 @@ avg_repo_size = total_size / total_repos / 1024 if total_repos > 0 else 0
 avg_bytes_per_line = 50
 language_loc = {lang: bytes_count // avg_bytes_per_line for lang, bytes_count in language_bytes.items()}
 sorted_loc = sorted(language_loc.items(), key=lambda item: item[1], reverse=True)
-top_languages_loc = sorted_loc[:10]  
+top_languages_loc = sorted_loc[:6]  
 
 # Update README
 with open('README.md', 'w') as f:
@@ -100,8 +100,7 @@ with open('README.md', 'w') as f:
     f.write(f"## 📊 Quick Stats\n\n")
     f.write(f"| Metric               | Value       | Metric               | Value       |\n")
     f.write(f"|----------------------|-------------|----------------------|-------------|\n")
-    f.write(f"| Total Repositories   | {total_repos} | Total Stars Earned   | {total_stars} |\n")
-    f.write(f"| Total Forks          | {total_forks} | Total Watchers       | {total_watchers} |\n")
+    f.write(f"| Total Repositories   | {total_repos} | Total Watchers       | {total_watchers} |\n")
     f.write(f"| Languages Used       | {len(languages_used)} | Average Repo Size    | {avg_repo_size:.2f} MB |\n")
     
     # Commit Activity Table
@@ -112,7 +111,7 @@ with open('README.md', 'w') as f:
     f.write(f"| Last 30 Days     | {commit_counts['30d']} | Last 365 Days    | {commit_counts['365d']} |\n")
     
     # Top Languages by Lines of Code Table
-    f.write(f"\n## 📝 Top Languages by Lines of Code\n\n")
+    f.write(f"\n## 📝 Top Languagese\n\n")
     f.write(f"| Language       | LOC        | Language       | LOC        |\n")
     f.write(f"|----------------|------------|----------------|------------|\n")
     for i in range(0, len(top_languages_loc), 2):
@@ -124,7 +123,7 @@ with open('README.md', 'w') as f:
     perth_now = datetime.now(perth_tz)
     date_str = perth_now.strftime("%d %B %Y")
     time_str = perth_now.strftime("%I:%M %p")
-    f.write(f"Updated on **{date_str}** at **{time_str}** (Perth Time)\n")
+    f.write(f"Updated on **{date_str}** at **{time_str}** (+8)\n")
 
 # Send Discord message with updated stats
 short_date_str = perth_now.strftime("%d %b %y")
