@@ -102,7 +102,6 @@ with open('README.md', 'w') as f:
     f.write(f"<tr><td><b>Total Repositories</b></td><td>{total_repos}</td></tr>\n")
     f.write(f"<tr><td><b>Total Watchers</b></td><td>{total_watchers}</td></tr>\n")
     f.write(f"<tr><td><b>Languages Used</b></td><td>{len(languages_used)}</td></tr>\n")
-    f.write(f"<tr><td><b>Average Repo Size</b></td><td>{avg_repo_size:.2f} MB</td></tr>\n")
     f.write(f"</table>\n</td>\n")
     # --- Top Languages ---
     f.write(f"<td valign='top'>\n")
