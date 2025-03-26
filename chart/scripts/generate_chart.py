@@ -19,7 +19,7 @@ if not github_token:
 if not webhook_url:
     raise ValueError("DISCORD_WEBHOOK environment variable not set or invalid")
 
-github_username = "FiendsXYZ"
+github_username = "CK-XYZ"
 
 # Set up timezone
 perth_tz = pytz.timezone('Australia/Perth')
