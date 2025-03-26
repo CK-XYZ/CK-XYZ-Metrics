@@ -95,43 +95,35 @@ top_languages_loc = sorted_loc[:6]
 # Update README
 with open('README.md', 'w') as f:
     f.write(f"<table><tr>\n")
-    # Quick Stats
-    f.write(f"<td valign='top'>\n\n")
-    f.write(f"<h2>📊 Quick Stats</h2>\n\n")
+    # --- Quick Stats ---
+    f.write(f"<td valign='top'>\n")
+    f.write(f"<h2>📊 Quick Stats</h2>\n")
     f.write(f"<table>\n")
     f.write(f"<tr><td><b>Total Repositories</b></td><td>{total_repos}</td></tr>\n")
     f.write(f"<tr><td><b>Total Watchers</b></td><td>{total_watchers}</td></tr>\n")
     f.write(f"<tr><td><b>Languages Used</b></td><td>{len(languages_used)}</td></tr>\n")
     f.write(f"<tr><td><b>Average Repo Size</b></td><td>{avg_repo_size:.2f} MB</td></tr>\n")
     f.write(f"</table>\n</td>\n")
-    # Commit Activity
-    f.write(f"<td valign='top'>\n\n")
-    f.write(f"<h2>📈 Commit Activity</h2>\n\n")
+    # --- Commit Activity ---
+    f.write(f"<td valign='top'>\n")
+    f.write(f"<h2>📈 Commit Activity</h2>\n")
     f.write(f"<table>\n")
     f.write(f"<tr><td><b>Last 24 Hours</b></td><td>{commit_counts['24h']}</td></tr>\n")
     f.write(f"<tr><td><b>Last 7 Days</b></td><td>{commit_counts['7d']}</td></tr>\n")
     f.write(f"<tr><td><b>Last 30 Days</b></td><td>{commit_counts['30d']}</td></tr>\n")
     f.write(f"<tr><td><b>Last 365 Days</b></td><td>{commit_counts['365d']}</td></tr>\n")
     f.write(f"</table>\n</td>\n")
+    # --- Top Languages ---
+    f.write(f"<td valign='top'>\n")
+    f.write(f"<h2>📝 Top Languages</h2>\n")
+    f.write(f"<table>\n")
+    for i in range(0, len(top_languages_loc), 2):
+        lang1, loc1 = top_languages_loc[i]
+        lang2, loc2 = top_languages_loc[i + 1] if i + 1 < len(top_languages_loc) else ("", "")
+        f.write(f"<tr><td><b>{lang1}</b></td><td>{loc1} LOC</td><td><b>{lang2}</b></td><td>{loc2} LOC</td></tr>\n")
+    f.write(f"</table>\n</td>\n")
     f.write(f"</tr></table>\n\n")
-    f.write(f"<h2>📝 Top Languages</h2>\n\n")
-    f.write(f"<table>\n<tr>\n")
-
-    cols = 3  # 3 language pairs per row = 6 cells
-    for i, (lang, loc) in enumerate(top_languages_loc):
-        f.write(f"<td><b>{lang}</b></td><td>{loc} LOC</td>")
-        if (i + 1) % cols == 0:
-            f.write("</tr>\n<tr>\n")
-
-    remainder = len(top_languages_loc) % cols
-    if remainder:
-        for _ in range(cols - remainder):
-            f.write("<td></td><td></td>")
-        f.write("</tr>\n")
-
-    f.write("</tr></table>\n\n")
-
-    # Last updated timestamp
+    # Footer
     f.write(f"<h2>📅 Last Updated</h2>\n\n")
     perth_now = datetime.now(perth_tz)
     date_str = perth_now.strftime("%d %B %Y")
