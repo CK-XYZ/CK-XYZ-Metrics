@@ -10,8 +10,8 @@
 <td valign='top'>
 <h2>📝 Top Languages</h2>
 <table>
-<tr><td><b>TypeScript</b></td><td>126578 LOC</td><td><b>JavaScript</b></td><td>86513 LOC</td></tr>
-<tr><td><b>Python</b></td><td>19555 LOC</td><td><b>CSS</b></td><td>16513 LOC</td></tr>
+<tr><td><b>TypeScript</b></td><td>126526 LOC</td><td><b>JavaScript</b></td><td>86513 LOC</td></tr>
+<tr><td><b>Python</b></td><td>19555 LOC</td><td><b>CSS</b></td><td>16524 LOC</td></tr>
 <tr><td><b>Solidity</b></td><td>15347 LOC</td><td><b>Handlebars</b></td><td>3926 LOC</td></tr>
 </table>
 </td>
@@ -19,4 +19,4 @@
 
 <h2>📅 Last Updated</h2>
 
-Updated on <b>08 April 2025</b> at <b>12:05 AM</b> (+8)
+Updated on <b>09 April 2025</b> at <b>12:05 AM</b> (+8)
